@@ -4,13 +4,17 @@ from datetime import datetime as dt
 seed = dt.now()
 word_file = "words.txt"
 pass_file = "commonpass.txt"
-num_symbol = "%^~|[]<>{}@#&*-+=()_$\"\'\:;/^1234567890"
+symbol_list = "%^~|[]<>{}@#&*-+=()_$\"\'\:;/^"
+num_list ="123456789"
+#CONFIG - Default 2
+num_of_words = 2
 
 random.seed(seed)
 
 def main():
 
-    for i in range(40):
+    #CONFIG - Amount of passwords generated - Default 5
+    for i in range(5):
 
         out = ''
 
@@ -23,8 +27,8 @@ def main():
         word_list = scrambleWord(word_list)
 
         #reselects if the amount of words is less than expected.
-        while(len(word_list) < 1):
-            word_list = createWordList()
+        while(len(word_list) < num_of_words):
+            word_list = selectWords()
             word_list = scrambleWord(word_list)
 
         #builds final string
@@ -44,7 +48,7 @@ def selectWords():
 
     #randomly selects x amount of words.
     out_list = []
-    for i in range(2):
+    for i in range(num_of_words):
         random_int = random.randint(0, (len(word_list)-1))
         out_list.append(word_list[random_int])
 
@@ -69,7 +73,8 @@ def isCommon(word_list):
 
 def scrambleWord(word_list):
 
-    new_list = [ ]
+    final_list = [ ]
+    scram_list = [ ]
 
     for word in word_list:
 
@@ -90,22 +95,38 @@ def scrambleWord(word_list):
         mid = ''.join(mid_chars)
         word = start + mid + end
 
-        #builds new list for words
-        new_list.append(word)
+        #builds new list of words with capitals for next section.
+        scram_list.append(word.capitalize())
 
-    return new_list
+    #break each word into chars
+    for word in scram_list:
+        word_chars = list(word)
+
+        #tries a random number each char, if below X, char becomes a capital.
+        #CONFIG - Default 3
+        for char in word_chars:
+            if random.randint(0, 10) <= 3:
+               rand_char_int = random.randint(0,len(word_chars)-1)
+               word_chars[rand_char_int] = word_chars[rand_char_int].upper()
+
+        #rebuilds word strings and appends to new output list.
+        word_out = ''.join(word_chars)
+        final_list.append(word_out)
+
+    return final_list
 
 def symbolGen():
 
     #defines the amount of symbols between words
-    rand_range = random.randint(1, 3)
+    #CONFIG - Default 2,4
+    rand_range = random.randint(2, 4)
 
     #shuffles the premade symbols string
-    num_symbol_chars = list(num_symbol)
-    random.shuffle(num_symbol_chars)
+    symbol_list_chars = list(symbol_list)
+    random.shuffle(symbol_list_chars)
 
     #selects x first chars from the shuffled symbols string
-    symbol_out = ''.join(num_symbol_chars[0:rand_range])
+    symbol_out = ''.join(symbol_list_chars[0:rand_range])
 
     return symbol_out
 
