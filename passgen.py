@@ -15,7 +15,7 @@ random.seed(seed)
 def main():
 
     #CONFIG - Amount of passwords generated - Default 5
-    for i in range(100):
+    for i in range(5):
 
         out = ''
 
@@ -87,7 +87,7 @@ def scrambleWord(word_list):
 
         #breaks the word into 3 parts based on the center.
         half = int(len(word) / 2)
-        half_min, half_add = half - 1, half + 2
+        half_min, half_add = half - 2, half + 2
         start, mid, end = word[0:half_min], word[half_min:half_add], word[half_add:len(word)]
 
         #shuffles middle characters
@@ -127,24 +127,24 @@ def symbolGen():
     #shuffles the premade symbols string
     symbol_list_chars = list(symbol_list)
     random.shuffle(symbol_list_chars)
-	
+
     #selects x first chars from the shuffled symbols string
     symbol_out = ''.join(symbol_list_chars[0:rand_range])
-    
+
     #shuffles premade numbers string
     num_list_chars = list(num_list)
     random.shuffle(num_list_chars)
-    
+
     #selects first x number of numbers
     num_out = ''.join(num_list_chars[0:rand_range])
-    
+
     #create combined string of both nimbers and symbols
     combined_string = symbol_out + num_out
-    
+
     #scrambles combined string
     combined_chars = list(combined_string)
     random.shuffle(combined_chars)
-    
+
     #final output of combined symbols and letters to be used
     final_out = ''.join(combined_chars[0:rand_range])
 
