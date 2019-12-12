@@ -25,12 +25,12 @@ def main():
         while(isCommon(word_list)):
             word_list = selectWords()
 
-        word_list = scrambleWord(word_list)
+        word_list = formatWord(word_list)
 
         #reselects if the amount of words is less than expected.
         while(len(word_list) < num_of_words):
             word_list = selectWords()
-            word_list = scrambleWord(word_list)
+            word_list = formatWord(word_list)
 
         #builds final string
         for word in word_list:
@@ -74,32 +74,39 @@ def isCommon(word_list):
 
     return is_common
 
-def scrambleWord(word_list):
+def formatWord(word_list):
 
     final_list = [ ]
     scram_list = [ ]
 
     for word in word_list:
 
-        #a catch if the word is odd numbered in length.
+        #breaks string into chars.
+        word_chars = list(word)
+
+        #random number to determin left or right char to swap.
+        left_or_right = random.randint(1,2)
+
+        #a catch if the word is odd numbered in length and define half point(ish).
         if (len(word) % 2) is not 0:
             half = (len(word) + 1) / 2
 
-        #breaks the word into 3 parts based on the center.
+        #define half point.
         half = int(len(word) / 2)
-        half_min, half_add = half - 2, half + 2
-        start, mid, end = word[0:half_min], word[half_min:half_add], word[half_add:len(word)]
 
-        #shuffles middle characters
-        mid_chars = list(mid)
-        random.shuffle(mid_chars)
+        #logic for 'left or right', if 1 then swap left, if 2 then swap right char.
+        if left_or_right is 1:
+            save_char = word_chars[half]
+            word_chars[half] = word_chars[half -1 ]
+            word_chars[half - 1] = save_char
+        elif left_or_right is 2:
+            save_char = word_chars[half]
+            word_chars[half] = word_chars[half + 1]
+            word_chars[half + 1] = save_char
 
-        #reconstructs word
-        mid = ''.join(mid_chars)
-        word = start + mid + end
+        #rebuild string and append to output list, also capitalises.
+        scram_list.append(''.join(word_chars).capitalize())
 
-        #builds new list of words with capitals for next section.
-        scram_list.append(word.capitalize())
 
     #break each word into chars
     for word in scram_list:
